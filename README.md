@@ -107,7 +107,7 @@ Follow these instructions to get a local copy up and running.
 1.  **Clone the repository:**
 
     ```sh
-    git clone https://github.com/your-username/CropTellect.git
+    git clone https://github.com/Atharv3142M/CropTellect.git
     cd CropTellect
     ```
 
