@@ -87,7 +87,7 @@ CropTellect/
 
 The model was trained on a curated dataset available on Kaggle, containing thousands of images of healthy and diseased crop leaves.
 
- **Kaggle Dataset:** [Crop Disease Dataset (Atharv Pose)](https://www.kaggle.com/datasets/atharvpose/crops-disease)
+👉 **Kaggle Dataset:** [Crop Disease Dataset (Atharv Pose)](https://www.kaggle.com/datasets/atharvpose/crops-disease)
 
 > *“Every pixel has a story; the model just needs to listen.”*
 
