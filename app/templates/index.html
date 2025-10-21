@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CropTellect - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(165deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%);
+      overflow-x: hidden;
+      color: #f4f1de;
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background: rgba(26, 77, 46, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      color: #f4f1de;
+      font-size: 1.8em;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .nav-links {
+        display: flex;
+        align-items: center;
+    }
+    .nav-links a {
+      color: #e3d5ca;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: #f4f1de; }
+    .lang-switcher { margin-left: 30px; }
+    .lang-switcher button {
+        background: none;
+        border: 1px solid #e3d5ca;
+        color: #e3d5ca;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .lang-switcher button:hover, .lang-switcher button.active {
+        background: #f4f1de;
+        color: #1a4d2e;
+    }
+    section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 100px 20px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .grass-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .grass {
+      position: absolute;
+      bottom: 0;
+      width: 8px;
+      background: linear-gradient(to top, #2d5a3d, #4f7942);
+      border-radius: 50% 50% 0 0;
+      transform-origin: bottom center;
+      animation: sway 3s ease-in-out infinite;
+      opacity: 0.6;
+    }
+    @keyframes sway {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
+    .grass:nth-child(1) { left: 5%; height: 80px; animation-delay: 0s; }
+    .grass:nth-child(2) { left: 15%; height: 100px; animation-delay: 0.3s; }
+    .grass:nth-child(3) { left: 25%; height: 90px; animation-delay: 0.6s; }
+    .grass:nth-child(4) { left: 35%; height: 110px; animation-delay: 0.2s; }
+    .grass:nth-child(5) { left: 45%; height: 85px; animation-delay: 0.8s; }
+    .grass:nth-child(6) { left: 55%; height: 95px; animation-delay: 0.4s; }
+    .grass:nth-child(7) { left: 65%; height: 105px; animation-delay: 0.7s; }
+    .grass:nth-child(8) { left: 75%; height: 88px; animation-delay: 0.1s; }
+    .grass:nth-child(9) { left: 85%; height: 92px; animation-delay: 0.5s; }
+    .grass:nth-child(10) { left: 95%; height: 98px; animation-delay: 0.9s; }
+    #hero { text-align: center; z-index: 10; }
+    .hero-content { animation: elegantFadeIn 1.2s ease-out; }
+    @keyframes elegantFadeIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-icon {
+      font-size: 6em; margin-bottom: 20px;
+      animation: gentle-bounce 3s ease-in-out infinite;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    }
+    @keyframes gentle-bounce {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif; font-size: 5em; font-weight: 700;
+      margin-bottom: 20px; text-shadow: 2px 4px 8px rgba(0,0,0,0.4); letter-spacing: 2px;
+    }
+    .hero-subtitle {
+      color: #e3d5ca; font-size: 1.5em; font-weight: 400; letter-spacing: 3px;
+      text-transform: uppercase; opacity: 0.9; margin-bottom: 40px;
+    }
+    .ornament {
+      width: 120px; height: 2px; background: linear-gradient(90deg, transparent, #f4f1de, transparent);
+      margin: 25px auto; position: relative;
+    }
+    .ornament::before, .ornament::after {
+      content: '◆'; position: absolute; font-size: 0.8em; top: -8px;
+    }
+    .ornament::before { left: -10px; } .ornament::after { right: -10px; }
+    .scroll-indicator { margin-top: 50px; animation: bounce-arrow 2s infinite; }
+    @keyframes bounce-arrow {
+      0%, 100% { transform: translateY(0); } 50% { transform: translateY(15px); }
+    }
+    .scroll-arrow { font-size: 3em; color: #f4f1de; cursor: pointer; opacity: 0.7; transition: opacity 0.3s; text-decoration: none; }
+    .scroll-arrow:hover { opacity: 1; }
+    .section-content { max-width: 1100px; text-align: center; z-index: 10; }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 3em; font-weight: 700;
+      margin-bottom: 20px; text-shadow: 2px 4px 8px rgba(0,0,0,0.4);
+    }
+    .about-card, .tech-card {
+      background: rgba(244, 241, 222, 0.95); backdrop-filter: blur(10px);
+      padding: 35px 40px; border-radius: 20px; box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      border: 3px solid rgba(227, 213, 202, 0.3); margin-top: 20px; color: #2d5a3d;
+    }
+    .about-text { font-size: 1.05em; line-height: 1.6; margin-bottom: 15px; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; margin-top: 30px; }
+    .feature-item {
+      background: rgba(45, 90, 61, 0.1); padding: 25px 20px; border-radius: 15px;
+      border: 2px solid rgba(45, 90, 61, 0.3); transition: all 0.3s ease;
+    }
+    .feature-item:hover { transform: translateY(-5px); background: rgba(45, 90, 61, 0.15); }
+    .feature-icon { font-size: 2.5em; margin-bottom: 12px; }
+    .feature-title { font-size: 1.15em; font-weight: 600; margin-bottom: 8px; }
+    .feature-desc { color: #4f7942; font-size: 0.95em; }
+    .how-it-works-grid {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-top: 40px;
+    }
+    .step-card {
+        background: rgba(244, 241, 222, 0.95);
+        color: #2d5a3d;
+        padding: 30px;
+        border-radius: 15px;
+        border: 2px solid rgba(227, 213, 202, 0.3);
+        flex-basis: 300px;
+        max-width: 350px;
+    }
+    .step-number { font-size: 2.5em; font-weight: 700; color: #1a4d2e; margin-bottom: 10px; }
+    .step-title { font-size: 1.2em; font-weight: 600; margin-bottom: 10px; }
+    .step-desc { font-size: 1em; line-height: 1.5; color: #4f7942; }
+    .tech-table { width: 100%; margin-top: 30px; border-collapse: collapse; }
+    .tech-table th, .tech-table td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(45, 90, 61, 0.2); }
+    .tech-table th { font-weight: 600; color: #1a4d2e; }
+    .cta-text {
+        max-width: 600px;
+        margin: 20px auto 40px;
+        font-size: 1.1em;
+        color: #e3d5ca;
+        line-height: 1.6;
+    }
+    .cta-button {
+        display: inline-block;
+        padding: 20px 60px;
+        background: linear-gradient(135deg, #e3d5ca 0%, #f4f1de 100%);
+        color: #1a4d2e;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.2em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-decoration: none;
+    }
+    .cta-button:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+    }
+    .footer {
+        background: rgba(15, 43, 27, 0.8);
+        text-align: center;
+        padding: 20px 0;
+        width: 100%;
+        position: relative;
+        z-index: 10;
+        color: #e3d5ca;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="nav-brand">CropTellect</a>
+    <div class="nav-links">
+        <a href="/" data-lang-key="nav_home">Home</a>
+        <a href="/analysis" data-lang-key="nav_analysis">Health Analysis</a>
+        <a href="/yield" data-lang-key="nav_yield">Yield Predictor</a>
+        <a href="/developers" data-lang-key="nav_developers">Developers</a>
+        <div class="lang-switcher">
+            <button onclick="setLanguage('en')" class="active">EN</button>
+            <button onclick="setLanguage('hi')">HI</button>
+        </div>
+    </div>
+  </nav>
+
+  <div class="grass-container">
+    <div class="grass"></div><div class="grass"></div><div class="grass"></div><div class="grass"></div><div class="grass"></div>
+    <div class="grass"></div><div class="grass"></div><div class="grass"></div><div class="grass"></div><div class="grass"></div>
+  </div>
+
+  <section id="hero">
+    <div class="hero-content">
+      <div class="hero-icon">🌾</div>
+      <h1 class="hero-title">CropTellect</h1>
+      <p class="hero-subtitle" data-lang-key="hero_subtitle">Precision Plant Diagnostics</p>
+      <div class="scroll-indicator">
+        <a href="#about" class="scroll-arrow">↓</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" style="background: rgba(0,0,0,0.1);">
+    <div class="section-content">
+      <h2 class="section-title" data-lang-key="about_title">About Our Project</h2>
+      <div class="ornament"></div>
+      <div class="about-card">
+        <p class="about-text" data-lang-key="about_p1">
+          CropTellect is an AI-powered plant disease detection system designed to help farmers and agricultural professionals identify crop diseases quickly and accurately. Built with TensorFlow, Flask, and a fine-tuned VGG19 model, it supports farmers with reliable diagnostics directly from leaf images.
+        </p>
+        <p class="about-text" data-lang-key="about_p2">
+          Our mission is to empower farmers with cutting-edge technology that enables early disease detection, reduces crop losses, and promotes sustainable agricultural practices.
+        </p>
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🧠</div>
+            <h3 class="feature-title" data-lang-key="feature1_title">AI-Powered</h3>
+            <p class="feature-desc" data-lang-key="feature1_desc">Advanced VGG19 neural network for accurate disease identification.</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title" data-lang-key="feature2_title">Fast Detection</h3>
+            <p class="feature-desc" data-lang-key="feature2_desc">Get instant results in seconds with our optimized TFLite model.</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🧾</div>
+            <h3 class="feature-title" data-lang-key="feature3_title">Scalable</h3>
+            <p class="feature-desc" data-lang-key="feature3_desc">Modular architecture for future model updates and enhancements.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how-it-works" style="background: rgba(0,0,0,0.2);">
+      <div class="section-content">
+          <h2 class="section-title" data-lang-key="how_title">How It Works</h2>
+          <div class="ornament"></div>
+          <div class="how-it-works-grid">
+              <div class="step-card">
+                  <div class="step-number">1</div>
+                  <h3 class="step-title" data-lang-key="step1_title">Upload Image</h3>
+                  <p class="step-desc" data-lang-key="step1_desc">Select a clear image of the crop leaf you want to analyze via our web interface.</p>
+              </div>
+              <div class="step-card">
+                  <div class="step-number">2</div>
+                  <h3 class="step-title" data-lang-key="step2_title">AI Processing</h3>
+                  <p class="step-desc" data-lang-key="step2_desc">The image is preprocessed for consistent dimensions and fed into our trained AI model.</p>
+              </div>
+              <div class="step-card">
+                  <div class="step-number">3</div>
+                  <h3 class="step-title" data-lang-key="step3_title">Get Results</h3>
+                  <p class="step-desc" data-lang-key="step3_desc">The model predicts the disease, and the result is displayed with a user-friendly interpretation.</p>
+              </div>
+          </div>
+      </div>
+  </section>
+  
+  <section id="start-analysis" style="background: rgba(0,0,0,0.25); min-height: auto; padding: 80px 20px;">
+      <div class="section-content">
+          <h2 class="section-title" data-lang-key="cta_title">Ready to Protect Your Crops?</h2>
+          <div class="ornament"></div>
+          <p class="cta-text" data-lang-key="cta_text">
+              Don't wait for diseases to take hold. Use our powerful AI tool to get an instant diagnosis and take action to protect your harvest.
+          </p>
+          <a href="/analysis" class="cta-button" data-lang-key="cta_button">Start Analysis Now</a>
+      </div>
+  </section>
+
+  <section id="tech-stack" style="background: rgba(0,0,0,0.1);">
+      <div class="section-content">
+          <h2 class="section-title" data-lang-key="tech_title">Technology Stack</h2>
+          <div class="ornament"></div>
+          <div class="tech-card">
+              <table class="tech-table">
+                  <thead>
+                      <tr>
+                          <th data-lang-key="tech_layer">Layer</th>
+                          <th data-lang-key="tech_tech">Technologies Used</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>Frontend</td>
+                          <td>HTML, CSS, JavaScript, Flask Templates</td>
+                      </tr>
+                      <tr>
+                          <td>Backend</td>
+                          <td>Python (Flask Framework)</td>
+                      </tr>
+                      <tr>
+                          <td>Model</td>
+                          <td>TensorFlow / Keras (VGG19 Architecture)</td>
+                      </tr>
+                      <tr>
+                          <td>Deployment</td>
+                          <td data-lang-key="tech_deployment">Localhost / Future Cloud Hosting</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </section>
+  
+  <footer class="footer">
+      <p data-lang-key="footer_text">&copy; 2024 CropTellect. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+      const translations = {
+          en: {
+              nav_home: "Home",
+              nav_analysis: "Health Analysis",
+              nav_yield: "Yield Predictor",
+              nav_developers: "Developers",
+              hero_subtitle: "Precision Plant Diagnostics",
+              about_title: "About Our Project",
+              about_p1: "CropTellect is an AI-powered plant disease detection system designed to help farmers and agricultural professionals identify crop diseases quickly and accurately. Built with TensorFlow, Flask, and a fine-tuned VGG19 model, it supports farmers with reliable diagnostics directly from leaf images.",
+              about_p2: "Our mission is to empower farmers with cutting-edge technology that enables early disease detection, reduces crop losses, and promotes sustainable agricultural practices.",
+              feature1_title: "AI-Powered",
+              feature1_desc: "Advanced VGG19 neural network for accurate disease identification.",
+              feature2_title: "Fast Detection",
+              feature2_desc: "Get instant results in seconds with our optimized TFLite model.",
+              feature3_title: "Scalable",
+              feature3_desc: "Modular architecture for future model updates and enhancements.",
+              how_title: "How It Works",
+              step1_title: "Upload Image",
+              step1_desc: "Select a clear image of the crop leaf you want to analyze via our web interface.",
+              step2_title: "AI Processing",
+              step2_desc: "The image is preprocessed for consistent dimensions and fed into our trained AI model.",
+              step3_title: "Get Results",
+              step3_desc: "The model predicts the disease, and the result is displayed with a user-friendly interpretation.",
+              cta_title: "Ready to Protect Your Crops?",
+              cta_text: "Don't wait for diseases to take hold. Use our powerful AI tool to get an instant diagnosis and take action to protect your harvest.",
+              cta_button: "Start Analysis Now",
+              tech_title: "Technology Stack",
+              tech_layer: "Layer",
+              tech_tech: "Technologies Used",
+              tech_deployment: "Localhost / Future Cloud Hosting",
+              footer_text: "&copy; 2024 CropTellect. All Rights Reserved."
+          },
+          hi: {
+              nav_home: "होम",
+              nav_analysis: "स्वास्थ्य विश्लेषण",
+              nav_yield: "उपज भविष्यवक्ता",
+              nav_developers: "डेवलपर्स",
+              hero_subtitle: "सटीक पौध निदान",
+              about_title: "हमारी परियोजना के बारे में",
+              about_p1: "क्रॉपटेलेक्ट एक एआई-संचालित संयंत्र रोग पहचान प्रणाली है जिसे किसानों और कृषि पेशेवरों को फसल रोगों को जल्दी और सटीक रूप से पहचानने में मदद करने के लिए डिज़ाइन किया गया है। TensorFlow, Flask, और एक फाइन-ट्यून VGG19 मॉडल के साथ निर्मित, यह सीधे पत्ती की छवियों से विश्वसनीय निदान के साथ किसानों का समर्थन करता है।",
+              about_p2: "हमारा मिशन किसानों को अत्याधुनिक तकनीक के साथ सशक्त बनाना है जो शीघ्र रोग का पता लगाने में सक्षम बनाता है, फसल के नुकसान को कम करता है, और स्थायी कृषि पद्धतियों को बढ़ावा देता है।",
+              feature1_title: "एआई-संचालित",
+              feature1_desc: "सटीक रोग पहचान के लिए उन्नत वीजीजी19 तंत्रिका नेटवर्क।",
+              feature2_title: "तेजी से पहचान",
+              feature2_desc: "हमारे अनुकूलित TFLite मॉडल के साथ सेकंडों में तत्काल परिणाम प्राप्त करें।",
+              feature3_title: "स्केलेबल",
+              feature3_desc: "भविष्य के मॉडल अपडेट और संवर्द्धन के लिए मॉड्यूलर वास्तुकला।",
+              how_title: "यह काम किस प्रकार करता है",
+              step1_title: "छवि अपलोड करें",
+              step1_desc: "हमारे वेब इंटरफ़ेस के माध्यम से विश्लेषण करने के लिए फसल के पत्ते की एक स्पष्ट छवि का चयन करें।",
+              step2_title: "एआई प्रसंस्करण",
+              step2_desc: "छवि को सुसंगत आयामों के लिए पूर्व-संसाधित किया जाता है और हमारे प्रशिक्षित एआई मॉडल में फीड किया जाता है।",
+              step3_title: "परिणाम प्राप्त करें",
+              step3_desc: "मॉडल बीमारी की भविष्यवाणी करता है, और परिणाम उपयोगकर्ता के अनुकूल व्याख्या के साथ प्रदर्शित होता है।",
+              cta_title: "अपनी फसलों की रक्षा के लिए तैयार हैं?",
+              cta_text: "बीमारियों के पकड़ने का इंतजार न करें। तत्काल निदान पाने के लिए हमारे शक्तिशाली एआई उपकरण का उपयोग करें और अपनी फसल की सुरक्षा के लिए कार्रवाई करें।",
+              cta_button: "अभी विश्लेषण शुरू करें",
+              tech_title: "प्रौद्योगिकी स्टैक",
+              tech_layer: "परत",
+              tech_tech: "प्रयुक्त प्रौद्योगिकियां",
+              tech_deployment: "लोकलहोस्ट / भविष्य में क्लाउड होस्टिंग",
+              footer_text: "&copy; 2024 क्रॉपटेलेक्ट। सर्वाधिकार सुरक्षित।"
+          }
+      };
+
+      function setLanguage(lang) {
+          document.querySelectorAll('[data-lang-key]').forEach(elem => {
+              const key = elem.getAttribute('data-lang-key');
+              if (translations[lang] && translations[lang][key]) {
+                  elem.innerHTML = translations[lang][key];
+              }
+          });
+          document.querySelectorAll('.lang-switcher button').forEach(btn => {
+              btn.classList.remove('active');
+          });
+          document.querySelector(`.lang-switcher button[onclick="setLanguage('${lang}')"]`).classList.add('active');
+          localStorage.setItem('language', lang);
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+          const savedLang = localStorage.getItem('language') || 'en';
+          setLanguage(savedLang);
+      });
+  </script>
+</body>
+</html>

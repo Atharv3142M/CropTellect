@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Yield Predictor - CropTellect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(165deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%); min-height: 100vh; display: flex; flex-direction: column; }
+    .navbar { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: rgba(26, 77, 46, 0.8); backdrop-filter: blur(10px); z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    .nav-brand { font-family: 'Playfair Display', serif; color: #f4f1de; font-size: 1.8em; text-decoration: none; font-weight: 700; }
+    .nav-links { display: flex; align-items: center; }
+    .nav-links a { color: #e3d5ca; text-decoration: none; margin-left: 30px; font-weight: 500; }
+    .lang-switcher button { background: none; border: 1px solid #e3d5ca; color: #e3d5ca; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .lang-switcher button.active { background: #f4f1de; color: #1a4d2e; }
+    .content-wrapper { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 120px 20px 40px; }
+    .predictor-card { background: rgba(244, 241, 222, 0.97); backdrop-filter: blur(15px); padding: 50px 60px; border-radius: 25px; box-shadow: 0 35px 90px rgba(0,0,0,0.5); max-width: 600px; text-align: center; }
+    .section-title { font-family: 'Playfair Display', serif; color: #1a4d2e; font-size: 2.5em; margin-bottom: 15px; }
+    .section-subtitle { color: #2d5a3d; font-size: 1.1em; margin-bottom: 30px; }
+    .form-group { margin-bottom: 25px; text-align: left; }
+    .form-group label { display: block; color: #2d5a3d; font-weight: 600; margin-bottom: 8px; }
+    .form-group input, .form-group select { width: 100%; padding: 12px 15px; border-radius: 8px; border: 2px solid rgba(45, 90, 61, 0.3); font-size: 1em; }
+    .input-group { display: flex; gap: 10px; }
+    .submit-btn { margin-top: 20px; padding: 18px 50px; background: linear-gradient(135deg, #2d5a3d 0%, #4f7942 100%); color: #f4f1de; border: none; border-radius: 50px; font-size: 1.1em; font-weight: 600; cursor: pointer; }
+    .footer { background: rgba(15, 43, 27, 0.8); text-align: center; padding: 20px 0; color: #e3d5ca; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+      <a href="/" class="nav-brand">CropTellect</a>
+      <div class="nav-links">
+          <a href="/" data-lang-key="nav_home">Home</a>
+          <a href="/analysis" data-lang-key="nav_analysis">Health Analysis</a>
+          <a href="/yield" data-lang-key="nav_yield">Yield Predictor</a>
+          <a href="/developers" data-lang-key="nav_developers">Developers</a>
+          <div class="lang-switcher">
+              <button onclick="setLanguage('en')" class="active">EN</button>
+              <button onclick="setLanguage('hi')">HI</button>
+          </div>
+      </div>
+  </nav>
+  
+  <div class="content-wrapper">
+    <div class="predictor-card">
+      <h2 class="section-title" data-lang-key="yield_title">Yield & Price Predictor</h2>
+      <p class="section-subtitle" data-lang-key="yield_subtitle">Enter details to estimate your crop's yield and price.</p>
+      <form action="/predict_yield" method="post">
+        <div class="form-group">
+          <label for="crop_type" data-lang-key="yield_crop_label">Select Crop Type</label>
+          <select id="crop_type" name="crop_type" required>
+            <option value="Corn" data-lang-key="yield_crop_corn">Corn</option>
+            <option value="Potato" data-lang-key="yield_crop_potato">Potato</option>
+            <option value="Rice" data-lang-key="yield_crop_rice">Rice</option>
+            <option value="Wheat" data-lang-key="yield_crop_wheat">Wheat</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="area" data-lang-key="yield_area_label">Land Area</label>
+          <div class="input-group">
+            <input type="number" id="area" name="area" step="0.01" required placeholder="e.g., 5.5">
+            <select name="unit">
+              <option value="hectare">Hectare</option>
+              <option value="acre">Acre</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="submit-btn" data-lang-key="yield_predict_btn">Predict</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+      <p data-lang-key="footer_text">&copy; 2024 CropTellect. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    const translations = {
+      en: {
+        nav_home: "Home", nav_analysis: "Health Analysis", nav_yield: "Yield Predictor", nav_developers: "Developers",
+        yield_title: "Yield & Price Predictor", yield_subtitle: "Enter details to estimate your crop's yield and price.",
+        yield_crop_label: "Select Crop Type", yield_crop_corn: "Corn", yield_crop_potato: "Potato", yield_crop_rice: "Rice", yield_crop_wheat: "Wheat",
+        yield_area_label: "Land Area", yield_predict_btn: "Predict", footer_text: "&copy; 2024 CropTellect. All Rights Reserved."
+      },
+      hi: {
+        nav_home: "होम", nav_analysis: "स्वास्थ्य विश्लेषण", nav_yield: "उपज भविष्यवक्ता", nav_developers: "डेवलपर्स",
+        yield_title: "उपज और मूल्य भविष्यवक्ता", yield_subtitle: "अपनी फसल की अनुमानित उपज और कीमत जानने के लिए विवरण भरें।",
+        yield_crop_label: "फसल का प्रकार चुनें", yield_crop_corn: "मक्का", yield_crop_potato: "आलू", yield_crop_rice: "चावल", yield_crop_wheat: "गेहूं",
+        yield_area_label: "भूमि का क्षेत्रफल", yield_predict_btn: "अनुमान लगाएं", footer_text: "&copy; 2024 क्रॉपटेलेक्ट। सर्वाधिकार सुरक्षित।"
+      }
+    };
+    function setLanguage(lang) {
+        document.querySelectorAll('[data-lang-key]').forEach(elem => {
+            const key = elem.getAttribute('data-lang-key');
+            if (translations[lang] && translations[lang][key]) { elem.innerHTML = translations[lang][key]; }
+        });
+        document.querySelectorAll('.lang-switcher button').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.lang-switcher button[onclick="setLanguage('${lang}')"]`).classList.add('active');
+        localStorage.setItem('language', lang);
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'en';
+        setLanguage(savedLang);
+    });
+  </script>
+</body>
+</html>

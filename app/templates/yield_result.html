@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Yield Prediction Results - CropTellect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; background: linear-gradient(165deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%); }
+    .navbar { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: rgba(26, 77, 46, 0.8); backdrop-filter: blur(10px); z-index: 1000; }
+    .nav-brand { font-family: 'Playfair Display', serif; color: #f4f1de; font-size: 1.8em; text-decoration: none; }
+    .nav-links { display: flex; align-items: center; }
+    .nav-links a { color: #e3d5ca; text-decoration: none; margin-left: 30px; }
+    .lang-switcher button { background: none; border: 1px solid #e3d5ca; color: #e3d5ca; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .lang-switcher button.active { background: #f4f1de; color: #1a4d2e; }
+    .result-container { z-index: 10; text-align: center; animation: reveal 1s ease-out; margin-top: 80px; flex-grow: 1; }
+    .result-card { background: rgba(244, 241, 222, 0.97); backdrop-filter: blur(15px); padding: 40px 50px; border-radius: 25px; box-shadow: 0 35px 90px rgba(0,0,0,0.5); max-width: 800px; }
+    .badge-container { margin-bottom: 20px; }
+    .success-badge { display: inline-flex; width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #2d5a3d, #4f7942); align-items: center; justify-content: center; font-size: 3.5em; color: #f4f1de; }
+    .status-text { color: #2d5a3d; text-transform: uppercase; }
+    .divider { width: 150px; height: 2px; background: linear-gradient(90deg, transparent, #2d5a3d, transparent); margin: 25px auto; }
+    .info-section { text-align: left; margin: 20px 0; padding: 20px; background: rgba(45, 90, 61, 0.05); border-radius: 15px; }
+    .info-section h3 { font-family: 'Playfair Display', serif; color: #1a4d2e; margin-bottom: 12px; }
+    .info-section p { color: #2d5a3d; font-size: 1.8em; font-weight: 600; }
+    .action-button { display: inline-block; padding: 18px 50px; background: linear-gradient(135deg, #2d5a3d 0%, #4f7942 100%); color: #f4f1de; text-decoration: none; border-radius: 50px; font-weight: 600; text-transform: uppercase; margin-top: 20px; }
+    .footer { background: rgba(15, 43, 27, 0.8); text-align: center; padding: 20px 0; width: 100%; color: #e3d5ca; position: relative; z-index: 10; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+      <a href="/" class="nav-brand">CropTellect</a>
+      <div class="nav-links">
+          <a href="/" data-lang-key="nav_home">Home</a>
+          <a href="/analysis" data-lang-key="nav_analysis">Health Analysis</a>
+          <a href="/yield" data-lang-key="nav_yield">Yield Predictor</a>
+          <a href="/developers" data-lang-key="nav_developers">Developers</a>
+          <div class="lang-switcher">
+              <button onclick="setLanguage('en')" class="active">EN</button>
+              <button onclick="setLanguage('hi')">HI</button>
+          </div>
+      </div>
+  </nav>
+
+  <div class="result-container">
+    <div class="result-card">
+      <div class="badge-container"><div class="success-badge">📈</div></div>
+      <div class="status-text" data-lang-key="yield_status">Prediction Complete</div>
+      <p style="color: #2d5a3d;">{{ crop }} for {{ area }}</p>
+      <div class="divider"></div>
+      <div class="info-section">
+          <h3 data-lang-key="yield_yield_label">Estimated Yield</h3>
+          <p>{{ yield_val }}</p>
+      </div>
+      <div class="info-section">
+          <h3 data-lang-key="yield_price_label">Estimated Price</h3>
+          <p>{{ price }}</p>
+      </div>
+      <a href="/yield" class="action-button" data-lang-key="yield_new_btn">🔄 New Prediction</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+      <p data-lang-key="footer_text">&copy; 2024 CropTellect. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    const translations = {
+      en: {
+        nav_home: "Home", nav_analysis: "Health Analysis", nav_yield: "Yield Predictor", nav_developers: "Developers",
+        yield_status: "Prediction Complete", yield_yield_label: "Estimated Yield",
+        yield_price_label: "Estimated Price", yield_new_btn: "🔄 New Prediction",
+        footer_text: "&copy; 2024 CropTellect. All Rights Reserved."
+      },
+      hi: {
+        nav_home: "होम", nav_analysis: "स्वास्थ्य विश्लेषण", nav_yield: "उपज भविष्यवक्ता", nav_developers: "डेवलपर्स",
+        yield_status: "अनुमान पूरा हुआ", yield_yield_label: "अनुमानित उपज",
+        yield_price_label: "अनुमानित कीमत", yield_new_btn: "🔄 नया अनुमान",
+        footer_text: "&copy; 2024 क्रॉपटेलेक्ट। सर्वाधिकार सुरक्षित।"
+      }
+    };
+    function setLanguage(lang) {
+        document.querySelectorAll('[data-lang-key]').forEach(elem => {
+            const key = elem.getAttribute('data-lang-key');
+            if (translations[lang] && translations[lang][key]) { elem.innerHTML = translations[lang][key]; }
+        });
+        document.querySelectorAll('.lang-switcher button').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.lang-switcher button[onclick="setLanguage('${lang}')"]`).classList.add('active');
+        localStorage.setItem('language', lang);
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'en';
+        setLanguage(savedLang);
+    });
+  </script>
+</body>
+</html>

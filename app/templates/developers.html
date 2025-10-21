@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CropTellect - Developers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(165deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%);
+      overflow-x: hidden; color: #f4f1de;
+    }
+    .navbar {
+      position: fixed; top: 0; left: 0; width: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 40px; background: rgba(26, 77, 46, 0.8);
+      backdrop-filter: blur(10px); z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif; color: #f4f1de; font-size: 1.8em;
+      text-decoration: none; font-weight: 700;
+    }
+    .nav-links { display: flex; align-items: center; }
+    .nav-links a {
+      color: #e3d5ca; text-decoration: none; margin-left: 30px;
+      font-weight: 500; transition: color 0.3s;
+    }
+    .nav-links a:hover { color: #f4f1de; }
+    .lang-switcher { margin-left: 30px; }
+    .lang-switcher button {
+        background: none; border: 1px solid #e3d5ca; color: #e3d5ca;
+        padding: 5px 10px; border-radius: 5px; cursor: pointer; transition: all 0.3s;
+    }
+    .lang-switcher button:hover, .lang-switcher button.active { background: #f4f1de; color: #1a4d2e; }
+    section {
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+      align-items: center; padding: 100px 20px 60px; position: relative; overflow: hidden;
+    }
+    .section-content { max-width: 1100px; text-align: center; z-index: 10; }
+    .ornament {
+      width: 120px; height: 2px; background: linear-gradient(90deg, transparent, #f4f1de, transparent);
+      margin: 25px auto; position: relative;
+    }
+    .ornament::before, .ornament::after {
+      content: '◆'; position: absolute; font-size: 0.8em; top: -8px;
+    }
+    .ornament::before { left: -10px; } .ornament::after { right: -10px; }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 3em; font-weight: 700;
+      margin-bottom: 20px; text-shadow: 2px 4px 8px rgba(0,0,0,0.4);
+    }
+    .team-intro { max-width: 800px; margin: 0 auto 40px; font-size: 1.1em; color: #e3d5ca; }
+    .team-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
+      max-width: 900px; margin: 50px auto 0; z-index: 10;
+    }
+    .team-card {
+      background: rgba(244, 241, 222, 0.95); backdrop-filter: blur(10px);
+      padding: 35px 30px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border: 3px solid rgba(227, 213, 202, 0.3); text-align: center; transition: all 0.4s ease; color: #2d5a3d;
+    }
+    .team-card:hover { transform: translateY(-10px); box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+    .team-avatar {
+      width: 100px; height: 100px; background: linear-gradient(135deg, #2d5a3d, #4f7942);
+      border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;
+      font-size: 2.5em; box-shadow: 0 10px 30px rgba(45, 90, 61, 0.3); color: #f4f1de;
+    }
+    .team-name { font-family: 'Playfair Display', serif; font-size: 1.6em; font-weight: 700; margin-bottom: 8px; }
+    .team-role {
+      color: #4f7942; font-size: 1em; font-weight: 500; margin-bottom: 12px;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .team-bio { font-size: 0.92em; line-height: 1.6; }
+    .team-socials {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(45, 90, 61, 0.2);
+    }
+    .team-socials a {
+      text-decoration: none;
+      color: #1a4d2e; /* Dark primary green */
+      font-weight: 600;
+      margin: 0 10px;
+      font-size: 0.9em;
+      transition: color 0.3s ease;
+    }
+    .team-socials a:hover {
+      color: #4f7942; /* Lighter hover green */
+    }
+    .footer {
+        background: rgba(15, 43, 27, 0.8); text-align: center;
+        padding: 20px 0; width: 100%; position: relative; z-index: 10; color: #e3d5ca;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="nav-brand">CropTellect</a>
+    <div class="nav-links">
+        <a href="/" data-lang-key="nav_home">Home</a>
+        <a href="/analysis" data-lang-key="nav_analysis">Health Analysis</a>
+        <a href="/yield" data-lang-key="nav_yield">Yield Predictor</a>
+        <a href="/developers" data-lang-key="nav_developers">Developers</a>
+        <div class="lang-switcher">
+            <button onclick="setLanguage('en')" class="active">EN</button>
+            <button onclick="setLanguage('hi')">HI</button>
+        </div>
+    </div>
+  </nav>
+
+  <section id="team">
+    <div class="section-content">
+      <h2 class="section-title" data-lang-key="team_title">Meet Our Team</h2>
+      <div class="ornament"></div>
+      <p class="team-intro" data-lang-key="team_intro">
+          This project is the result of a collaborative effort by a dedicated team of students passionate about leveraging technology to solve real-world agricultural challenges.
+      </p>
+      
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">👨‍💻</div>
+          <h3 class="team-name">Atharv Pose</h3>
+          <p class="team-role" data-lang-key="role_atharv">Full Stack Developer, Data Scientist & Agricultural Specialist</p>
+          <p class="team-bio" data-lang-key="bio_atharv">Responsible for developing the web application, handling data science tasks, and providing agricultural domain expertise.</p>
+          <div class="team-socials">
+            <a href="https://github.com/Atharv3142M" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/atharv-pose?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">👨‍💻</div>
+          <h3 class="team-name">Suraj Layak</h3>
+          <p class="team-role" data-lang-key="role_suraj">ML Engineer</p>
+          <p class="team-bio" data-lang-key="bio_suraj">Specialized in deep learning and computer vision, responsible for model training and optimization.</p>
+          <div class="team-socials">
+            <a href="https://github.com/dino68-ai" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/suraj-layak-65aa771bb?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+      <p data-lang-key="footer_text">&copy; 2024 CropTellect. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+      const translations = {
+          en: {
+              nav_home: "Home",
+              nav_analysis: "Analysis",
+              nav_developers: "Developers",
+              team_title: "Meet Our Team",
+              team_intro: "This project is the result of a collaborative effort by a dedicated team of students passionate about leveraging technology to solve real-world agricultural challenges.",
+              role_atharv: "Full Stack Developer, Data Scientist & Agricultural Specialist",
+              bio_atharv: "Responsible for developing the web application, handling data science tasks, and providing agricultural domain expertise.",
+              role_suraj: "ML Engineer",
+              bio_suraj: "Specialized in deep learning and computer vision, responsible for model training and optimization.",
+              footer_text: "&copy; 2024 CropTellect. All Rights Reserved."
+          },
+          hi: {
+              nav_home: "होम",
+              nav_analysis: "विश्लेषण",
+              nav_developers: "डेवलपर्स",
+              team_title: "हमारी टीम से मिलें",
+              team_intro: "यह परियोजना वास्तविक दुनिया की कृषि चुनौतियों को हल करने के लिए प्रौद्योगिकी का लाभ उठाने के बारे में भावुक छात्रों की एक समर्पित टीम द्वारा एक सहयोगात्मक प्रयास का परिणाम है।",
+              role_atharv: "फुल स्टैक डेवलपर, डेटा वैज्ञानिक और कृषि विशेषज्ञ",
+              bio_atharv: "वेब एप्लिकेशन विकसित करने, डेटा विज्ञान कार्यों को संभालने और कृषि डोमेन विशेषज्ञता प्रदान करने के लिए जिम्मेदार।",
+              role_suraj: "एमएल इंजीनियर",
+              bio_suraj: "डीप लर्निंग और कंप्यूटर विजन में विशेषज्ञता, मॉडल प्रशिक्षण और अनुकूलन के लिए जिम्मेदार।",
+              footer_text: "&copy; 2024 क्रॉपटेलेक्ट। सर्वाधिकार सुरक्षित।"
+          }
+      };
+
+      function setLanguage(lang) {
+          document.querySelectorAll('[data-lang-key]').forEach(elem => {
+              const key = elem.getAttribute('data-lang-key');
+              if (translations[lang] && translations[lang][key]) {
+                  elem.innerHTML = translations[lang][key];
+              }
+          });
+          document.querySelectorAll('.lang-switcher button').forEach(btn => {
+              btn.classList.remove('active');
+          });
+          document.querySelector(`.lang-switcher button[onclick="setLanguage('${lang}')"]`).classList.add('active');
+          localStorage.setItem('language', lang);
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+          const savedLang = localStorage.getItem('language') || 'en';
+          setLanguage(savedLang);
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CropTellect - Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(165deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%);
+      overflow-x: hidden; color: #f4f1de;
+    }
+    .navbar {
+      position: fixed; top: 0; left: 0; width: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 40px; background: rgba(26, 77, 46, 0.8);
+      backdrop-filter: blur(10px); z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif; color: #f4f1de; font-size: 1.8em;
+      text-decoration: none; font-weight: 700;
+    }
+    .nav-links { display: flex; align-items: center; }
+    .nav-links a {
+      color: #e3d5ca; text-decoration: none; margin-left: 30px;
+      font-weight: 500; transition: color 0.3s;
+    }
+    .nav-links a:hover { color: #f4f1de; }
+    .lang-switcher { margin-left: 30px; }
+    .lang-switcher button {
+        background: none; border: 1px solid #e3d5ca; color: #e3d5ca;
+        padding: 5px 10px; border-radius: 5px; cursor: pointer; transition: all 0.3s;
+    }
+    .lang-switcher button:hover, .lang-switcher button.active { background: #f4f1de; color: #1a4d2e; }
+    section {
+      min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; padding: 100px 20px 60px;
+      position: relative; overflow: hidden;
+    }
+    .ornament {
+      width: 120px; height: 2px; background: linear-gradient(90deg, transparent, #f4f1de, transparent);
+      margin: 25px auto; position: relative;
+    }
+    .ornament::before, .ornament::after {
+      content: '◆'; position: absolute; font-size: 0.8em; top: -8px;
+    }
+    .ornament::before { left: -10px; } .ornament::after { right: -10px; }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 3em; font-weight: 700;
+      margin-bottom: 20px; text-shadow: 2px 4px 8px rgba(0,0,0,0.4);
+    }
+    .analysis-container { position: relative; z-index: 10; text-align: center; }
+    .analysis-intro { max-width: 700px; margin: 0 auto 30px; font-size: 1.1em; color: #e3d5ca; }
+    .upload-card {
+      background: rgba(244, 241, 222, 0.95); backdrop-filter: blur(10px);
+      padding: 50px 60px; border-radius: 20px; box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      border: 3px solid rgba(227, 213, 202, 0.3); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative; overflow: hidden; max-width: 700px; margin: 30px auto 0; color: #2d5a3d;
+    }
+    .upload-card::before {
+      content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.7s;
+    }
+    .upload-card:hover::before { left: 100%; }
+    .upload-card:hover { transform: translateY(-8px); box-shadow: 0 40px 100px rgba(0,0,0,0.6); }
+    .upload-zone {
+      border: 3px dashed #2d5a3d; border-radius: 15px; padding: 40px 60px;
+      background: transparent; transition: all 0.3s ease; cursor: pointer;
+      position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .upload-zone:hover { border-color: #4f7942; background: rgba(79, 121, 66, 0.1); transform: scale(1.02); }
+    .upload-icon {
+      font-size: 4em; color: #2d5a3d; margin-bottom: 15px; display: block;
+      animation: float-up-down 2.5s ease-in-out infinite; text-align: center;
+    }
+    @keyframes float-up-down {
+      0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); }
+    }
+    .upload-text { font-size: 1.3em; font-weight: 600; margin-bottom: 8px; }
+    .upload-subtext { color: #4f7942; font-size: 0.95em; opacity: 0.8; }
+    input[type="file"] { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer; }
+    .file-name {
+      margin-top: 20px; padding: 12px 25px; background: #2d5a3d; color: #f4f1de;
+      border-radius: 25px; font-size: 0.95em; display: inline-block; opacity: 0;
+      transform: translateY(10px); transition: all 0.4s ease;
+    }
+    .file-name.show { opacity: 1; transform: translateY(0); }
+    .submit-btn {
+      margin-top: 30px; padding: 20px 60px; background: linear-gradient(135deg, #2d5a3d 0%, #4f7942 100%);
+      color: #f4f1de; border: none; border-radius: 50px; font-size: 1.2em; font-weight: 600; cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 15px 35px rgba(45, 90, 61, 0.4);
+      letter-spacing: 1px; text-transform: uppercase; position: relative; overflow: hidden;
+      width: 100%; max-width: 500px; display: block; margin-left: auto; margin-right: auto;
+    }
+    .submit-btn::before {
+      content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0;
+      border-radius: 50%; background: rgba(255,255,255,0.2); transform: translate(-50%, -50%); transition: width 0.6s, height 0.6s;
+    }
+    .submit-btn:hover::before { width: 300px; height: 300px; }
+    .submit-btn:hover { transform: translateY(-4px); box-shadow: 0 20px 45px rgba(45, 90, 61, 0.6); }
+    .submit-btn:active { transform: translateY(-2px); }
+    .btn-icon { font-size: 1.2em; margin-right: 10px; }
+    .deco-leaf {
+      position: absolute; font-size: 3em; opacity: 0.1;
+      animation: rotate-slow 30s linear infinite;
+    }
+    @keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .deco-leaf-1 { top: -30px; left: -30px; } .deco-leaf-2 { bottom: -30px; right: -30px; }
+    .footer {
+        background: rgba(15, 43, 27, 0.8); text-align: center;
+        padding: 20px 0; width: 100%; position: relative; z-index: 10; color: #e3d5ca;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="nav-brand">CropTellect</a>
+    <div class="nav-links">
+        <a href="/" data-lang-key="nav_home">Home</a>
+        <a href="/analysis" data-lang-key="nav_analysis">Health Analysis</a>
+        <a href="/yield" data-lang-key="nav_yield">Yield Predictor</a>
+        <a href="/developers" data-lang-key="nav_developers">Developers</a>
+        <div class="lang-switcher">
+            <button onclick="setLanguage('en')" class="active">EN</button>
+            <button onclick="setLanguage('hi')">HI</button>
+        </div>
+    </div>
+  </nav>
+
+  <section id="analysis">
+    <div class="analysis-container">
+      <h2 class="section-title" data-lang-key="analysis_title">Begin Analysis</h2>
+      <div class="ornament"></div>
+      <p class="analysis-intro" data-lang-key="analysis_intro">
+          Upload an image of a plant leaf to get an instant diagnosis. Our AI model will analyze the image and identify potential diseases with high accuracy.
+      </p>
+
+      <form action="/predict" method="post" enctype="multipart/form-data">
+        <div class="upload-card">
+          <div class="deco-leaf deco-leaf-1">🌿</div>
+          <div class="deco-leaf deco-leaf-2">🍃</div>
+            <label class="upload-zone">
+              <div class="upload-icon">📷</div>
+              <div class="upload-text" data-lang-key="upload_text">Select Crop Image</div>
+              <div class="upload-subtext" data-lang-key="upload_subtext">Supports JPG, PNG & JPEG formats</div>
+              <input type="file" name="file" accept="image/*" required id="fileInput">
+            </label>
+          <div class="file-name" id="fileName"></div>
+          <button type="submit" class="submit-btn">
+            <span class="btn-icon">🔬</span>
+            <span data-lang-key="analysis_button">Begin Analysis</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+      <p data-lang-key="footer_text">&copy; 2024 CropTellect. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    const translations = {
+        en: {
+            nav_home: "Home",
+            nav_analysis: "Analysis",
+            nav_developers: "Developers",
+            analysis_title: "Begin Analysis",
+            analysis_intro: "Upload an image of a plant leaf to get an instant diagnosis. Our AI model will analyze the image and identify potential diseases with high accuracy.",
+            upload_text: "Select Crop Image",
+            upload_subtext: "Supports JPG, PNG & JPEG formats",
+            analysis_button: "Begin Analysis",
+            footer_text: "&copy; 2Two 024 CropTellect. All Rights Reserved."
+        },
+        hi: {
+            nav_home: "होम",
+            nav_analysis: "विश्लेषण",
+            nav_developers: "डेवलपर्स",
+            analysis_title: "विश्लेषण शुरू करें",
+            analysis_intro: "तत्काल निदान पाने के लिए पौधे की पत्ती की एक छवि अपलोड करें। हमारा एआई मॉडल छवि का विश्लेषण करेगा और उच्च सटीकता के साथ संभावित बीमारियों की पहचान करेगा।",
+            upload_text: "फसल की छवि चुनें",
+            upload_subtext: "JPG, PNG और JPEG प्रारूपों का समर्थन करता है",
+            analysis_button: "विश्लेषण शुरू करें",
+            footer_text: "&copy; 2024 क्रॉपटेलेक्ट। सर्वाधिकार सुरक्षित।"
+        }
+    };
+
+    function setLanguage(lang) {
+        document.querySelectorAll('[data-lang-key]').forEach(elem => {
+            const key = elem.getAttribute('data-lang-key');
+            if (translations[lang] && translations[lang][key]) {
+                elem.innerHTML = translations[lang][key];
+            }
+        });
+        document.querySelectorAll('.lang-switcher button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`.lang-switcher button[onclick="setLanguage('${lang}')"]`).classList.add('active');
+        localStorage.setItem('language', lang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'en';
+        setLanguage(savedLang);
+
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        
+        fileInput.addEventListener('change', function(e) {
+          if (e.target.files.length > 0) {
+            fileName.innerHTML = '✓ ' + e.target.files[0].name;
+            fileName.classList.add('show');
+          }
+        });
+    });
+  </script>
+</body>
+</html>
