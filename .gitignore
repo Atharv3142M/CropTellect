@@ -30,13 +30,13 @@ validation/
 __pycache__/
 
 
-*.tflite
+
 *.h5
 *.pt
 *.pth
 *.weights
 *.ckpt
-*.tflite
+
 
 # Ignore common dataset file types
 *.jpg
